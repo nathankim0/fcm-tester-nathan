@@ -105,7 +105,7 @@ export default function FCMTestPage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <h1 className="text-3xl font-bold text-center mb-4 text-gray-900">
-          FCM 테스터 (Made by Nathan)
+          FCM 테스터
         </h1>
         
         {/* Firebase 상태 표시 */}
@@ -234,7 +234,7 @@ export default function FCMTestPage() {
         
         {/* Footer */}
         <div className="mt-8 text-center text-sm text-gray-500">
-          <p>Made by Nathan (jinyeob07@gmail.com)</p>
+          <p>Made with ❤️ by Nathan (jinyeob07@gmail.com)</p>
         </div>
       </div>
     </div>
