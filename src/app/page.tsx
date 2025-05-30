@@ -88,7 +88,9 @@ export default function FCMTestPage() {
       const data = await response.json();
       
       if (data.status === 'success') {
-        setFirebaseStatus(`✅ Firebase 연결 성공\n📋 프로젝트: ${data.projectId}\n📧 계정: ${data.serviceAccountEmail}`);
+        // 이메일 마스킹 처리
+        const maskedEmail = data.serviceAccountEmail?.replace(/(.{3}).*@/, '$1***@') || '***';
+        setFirebaseStatus(`✅ Firebase 연결 성공\n📋 프로젝트: ${data.projectId}\n📧 계정: ${maskedEmail}`);
       } else {
         setFirebaseStatus(`❌ Firebase 설정 오류\n${data.message}\n💡 ${data.hint || ''}`);
       }
