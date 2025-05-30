@@ -94,6 +94,7 @@ interface RequestBody {
   customTitle: string;
   customBody: string;
   customLink: string;
+  imageUrl?: string;
 }
 
 export async function POST(request: NextRequest) {
@@ -125,21 +126,33 @@ export async function POST(request: NextRequest) {
     let message: Message;
 
     if (body.messageType === 'data-only') {
+      const dataPayload: Record<string, string> = {
+        title: body.customTitle,
+        body: body.customBody,
+        link: body.customLink,
+      };
+
+      if (body.imageUrl) {
+        dataPayload.image = body.imageUrl;
+      }
+
       message = {
         token: body.token,
-        data: {
-          title: body.customTitle,
-          body: body.customBody,
-          link: body.customLink,
-        },
+        data: dataPayload,
       };
     } else {
+      const notificationPayload: Record<string, string> = {
+        title: body.customTitle,
+        body: body.customBody,
+      };
+
+      if (body.imageUrl) {
+        notificationPayload.image = body.imageUrl;
+      }
+
       message = {
         token: body.token,
-        notification: {
-          title: body.customTitle,
-          body: body.customBody,
-        },
+        notification: notificationPayload,
         data: {
           link: body.customLink,
         },

@@ -8,6 +8,7 @@ interface MessageForm {
   customTitle: string;
   customBody: string;
   customLink: string;
+  imageUrl: string;
 }
 
 export default function FCMTestPage() {
@@ -16,7 +17,8 @@ export default function FCMTestPage() {
     messageType: 'data-only',
     customTitle: '새로운 메시지가 도착했습니다',
     customBody: '{{username}}님, 확인해보세요',
-    customLink: 'https://example.com'
+    customLink: 'https://example.com',
+    imageUrl: ''
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -59,22 +61,34 @@ export default function FCMTestPage() {
 
   const previewMessage = () => {
     if (form.messageType === 'data-only') {
-      return {
-        data: { 
-          title: form.customTitle, 
-          body: form.customBody, 
-          link: form.customLink 
-        }
+      const dataObj: Record<string, string> = { 
+        title: form.customTitle, 
+        body: form.customBody, 
+        link: form.customLink 
       };
+      
+      if (form.imageUrl) {
+        dataObj.image = form.imageUrl;
+      }
+      
+      return { data: dataObj };
     } else {
+      const notificationObj: Record<string, string> = { 
+        title: form.customTitle, 
+        body: form.customBody 
+      };
+      
+      const dataObj: Record<string, string> = { 
+        link: form.customLink 
+      };
+      
+      if (form.imageUrl) {
+        notificationObj.image = form.imageUrl;
+      }
+      
       return {
-        notification: { 
-          title: form.customTitle, 
-          body: form.customBody 
-        },
-        data: { 
-          link: form.customLink 
-        }
+        notification: notificationObj,
+        data: dataObj
       };
     }
   };
@@ -204,6 +218,19 @@ export default function FCMTestPage() {
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Image URL
+                </label>
+                <input
+                  type="text"
+                  value={form.imageUrl}
+                  onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Image URL을 입력하세요"
+                />
+              </div>
+
               <button
                 type="submit"
                 disabled={isLoading || !form.token}
@@ -229,6 +256,28 @@ export default function FCMTestPage() {
                 {JSON.stringify(previewMessage(), null, 2)}
               </pre>
             </div>
+            
+            {/* 이미지 미리보기 */}
+            {form.imageUrl && (
+              <div className="mt-4">
+                <h3 className="text-lg font-medium mb-2 text-gray-800">이미지 미리보기</h3>
+                <div className="bg-gray-50 rounded-md p-4">
+                  <img 
+                    src={form.imageUrl} 
+                    alt="FCM Image Preview" 
+                    className="max-w-full h-auto rounded-md"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      target.nextElementSibling?.classList.remove('hidden');
+                    }}
+                  />
+                  <div className="hidden text-red-500 text-sm">
+                    ❌ 이미지를 불러올 수 없습니다. URL을 확인해주세요.
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         
