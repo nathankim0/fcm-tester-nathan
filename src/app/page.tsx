@@ -18,7 +18,7 @@ export default function FCMTestPage() {
     customTitle: '새로운 메시지가 도착했습니다',
     customBody: '{{username}}님, 확인해보세요',
     customLink: 'https://example.com',
-    imageUrl: ''
+    imageUrl: 'https://designcompass.org/wp-content/uploads/2025/05/google-new-logo-04-1024x768.jpg'
   });
 
   const [isLoading, setIsLoading] = useState(false);
